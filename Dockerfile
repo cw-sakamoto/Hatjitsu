@@ -1,4 +1,4 @@
-FROM node:16.13.0-stretch
+FROM node:17.1.0-stretch
 
 ENV instDir /Hatjitsu
 WORKDIR ${instDir}

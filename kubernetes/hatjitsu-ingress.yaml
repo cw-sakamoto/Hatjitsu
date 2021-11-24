@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: hatjitsu
-        image: cwsakamoto/hatjitsu:16.13.0-stretch
+        image: cwsakamoto/hatjitsu:17.1.0-stretch
         ports:
         - containerPort: 5000
         resources:
