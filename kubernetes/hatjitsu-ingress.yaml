@@ -1,0 +1,78 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hatjitsu
+spec:
+  selector:
+    matchLabels:
+      app: hatjitsu
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: hatjitsu
+    spec:
+      containers:
+      - name: hatjitsu
+        image: cwsakamoto/hatjitsu:16.13.0-stretch
+        ports:
+        - containerPort: 5000
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "1"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hatjitsu
+spec:
+  type: ClusterIP
+  selector:
+    app: hatjitsu
+  ports:
+    - protocol: TCP
+      port: 5000
+      targetPort: 5000
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+metadata:
+  name: hatjitsu
+  annotations:
+    alb.ingress.kubernetes.io/healthcheck-interval-seconds: "10"
+    alb.ingress.kubernetes.io/healthcheck-port: traffic-port
+    alb.ingress.kubernetes.io/healthcheck-timeout-seconds: "5"
+    alb.ingress.kubernetes.io/healthy-threshold-count: "5"
+    alb.ingress.kubernetes.io/healthcheck-path: /
+    alb.ingress.kubernetes.io/healthcheck-timeout-seconds: "2"
+    alb.ingress.kubernetes.io/healthy-threshold-count: "2"
+    alb.ingress.kubernetes.io/load-balancer-attributes: idle_timeout.timeout_seconds=600
+    alb.ingress.kubernetes.io/target-group-attributes: stickiness.enabled=true,stickiness.lb_cookie.duration_seconds=60
+    alb.ingress.kubernetes.io/listen-ports: |-
+      [
+        {
+          "HTTPS": 443
+        }
+      ]
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/unhealthy-threshold-count: "2"
+    external-dns.alpha.kubernetes.io/hostname: hatjitsu.{DOMAIN}
+spec:
+  ingressClassName: alb
+  rules:
+  - host: hatjitsu.{DOMAIN}
+    http:
+      paths:
+      - backend:
+          service:
+            name: hatjitsu
+            port:
+              number: 5000
+        path: /*
+        pathType: ImplementationSpecific
