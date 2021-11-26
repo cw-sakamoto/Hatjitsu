@@ -41,7 +41,6 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-metadata:
   name: hatjitsu
   annotations:
     alb.ingress.kubernetes.io/healthcheck-interval-seconds: "10"
