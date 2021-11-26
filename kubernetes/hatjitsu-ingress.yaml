@@ -52,7 +52,7 @@ metadata:
     alb.ingress.kubernetes.io/healthcheck-timeout-seconds: "2"
     alb.ingress.kubernetes.io/healthy-threshold-count: "2"
     alb.ingress.kubernetes.io/load-balancer-attributes: idle_timeout.timeout_seconds=600
-    alb.ingress.kubernetes.io/target-group-attributes: stickiness.enabled=true,stickiness.lb_cookie.duration_seconds=60
+    #alb.ingress.kubernetes.io/target-group-attributes: stickiness.enabled=true,stickiness.lb_cookie.duration_seconds=600
     alb.ingress.kubernetes.io/listen-ports: |-
       [
         {
